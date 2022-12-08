@@ -41,7 +41,7 @@ public class Paddle {
 
 	public void draw(Graphics g) {
 		g.setColor(Color.cyan);
-		g.fillRect(x, 480, 100, 20);
+		g.fillRect(x, 480, 100, 8);
 	
 	}
 	
