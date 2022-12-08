@@ -8,18 +8,43 @@ import java.awt.event.KeyEvent;
 public class Paddle {
 
 	int x;
-	int y;
-	int width;
-	int height;
 	
 
-	public Paddle(int x, int y, int width, int height) {
+	public Paddle(int x) {
 		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
 	}
 
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			if (x == 0) {
+				x = 0;
+			}else {
+			setDirectionLeft();
+			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if (x == 300) {
+				x = 300;
+			}else {
+			setDirectionRight();
+			}
+		}
+	}
 
+	private void setDirectionRight() {
+		x += 10; 		
+	}
+
+	private void setDirectionLeft() {
+		x -= 10; 
+	}
+
+	public void draw(Graphics g) {
+		g.setColor(Color.cyan);
+		g.fillRect(x, 480, 100, 20);
+	
+	}
+	
+	
 	
 }

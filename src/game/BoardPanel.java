@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -13,7 +14,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class BoardPanel extends JPanel implements ActionListener, KeyListener{
+public class BoardPanel extends JPanel implements ActionListener{
 	
 	
 	static final int GAME_WIDTH = 400;
@@ -27,8 +28,9 @@ public class BoardPanel extends JPanel implements ActionListener, KeyListener{
 
 	
 	BoardPanel(){
+		paddle = new Paddle(150);
 		this.setPreferredSize(BOARD_SIZE);
-		this.addKeyListener((KeyListener) this);
+		this.addKeyListener(new Key());
 		this.setFocusable(true);
 		this.setFocusTraversalKeysEnabled(false);
 		timer = new Timer(1,this);
@@ -45,43 +47,33 @@ public class BoardPanel extends JPanel implements ActionListener, KeyListener{
 		g.setColor(Color.black);
 		g.fillRect(1,1,400,500);
 		
-		g.setColor(Color.cyan);
-		g.fillRect(x, 480, 100, 20);
-		g.dispose();
+		paddle.draw(g);
+//		g.dispose();
+		
+		Toolkit.getDefaultToolkit().sync(); 
 	}
 
 
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-			if (x == 0) {
-				x = 0;
-			}else {
-			setDirectionLeft();
-			}
-		}
-		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			if (x == 300) {
-				x = 300;
-			}else {
-			setDirectionRight();
-			}
-		}
-	}
-
-	private void setDirectionRight() {
-		x += 10; 		
-	}
-
-	private void setDirectionLeft() {
-		x -= 10; 
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
+	
+	private class Key implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		paddle.keyPressed(e);
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 		
 	}
 }
