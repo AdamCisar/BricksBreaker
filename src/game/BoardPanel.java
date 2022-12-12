@@ -24,7 +24,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 	Graphics graphics;
 	Image image;
 	Timer timer;
-	int x;
+	int x = 150;
 	int ballX = 150;
 	int ballY = 100;
 	int dirX = +3;
@@ -33,7 +33,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 
 	
 	BoardPanel(){
-		paddle = new Paddle(150);
+		paddle = new Paddle(x);
 		this.setPreferredSize(BOARD_SIZE);
 		this.addKeyListener(new Key());
 		this.setFocusable(true);
@@ -44,7 +44,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 	
 	public void paint(Graphics g) {
 		//background
-		g.setColor(Color.white);
+		g.setColor(Color.black);
 		g.fillRect(0,0,400,500);
 		
 		//paddle
@@ -54,11 +54,12 @@ public class BoardPanel extends JPanel implements ActionListener{
 		g.setColor(Color.orange);
 		g.fillOval(ballX,ballY, 15, 15);
 		g.dispose();
-		Toolkit.getDefaultToolkit().sync(); 
+//		Toolkit.getDefaultToolkit().sync(); 
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		ballMove();
 		repaint();
 		
@@ -102,7 +103,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		paddle.keyPressed(e);
+		x = paddle.keyPressed(e);
 		
 	}
 

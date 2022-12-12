@@ -14,29 +14,32 @@ public class Paddle {
 		this.x = x;
 	}
 
-	public void keyPressed(KeyEvent e) {
+	public int keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			if (x == 0) {
 				x = 0;
 			}else {
-			setDirectionLeft();
+			return setDirectionLeft();
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if (x == 300) {
 				x = 300;
 			}else {
-			setDirectionRight();
+			return setDirectionRight();
 			}
 		}
+		return x;
 	}
 
-	private void setDirectionRight() {
-		x += 10; 		
+	private int setDirectionRight() {
+		
+		return x += 10; 		
 	}
 
-	private void setDirectionLeft() {
-		x -= 10; 
+	private int setDirectionLeft() {
+		
+		return x -= 10; 
 	}
 
 	public void draw(Graphics g) {
