@@ -24,16 +24,18 @@ public class BoardPanel extends JPanel implements ActionListener{
 	Graphics graphics;
 	Image image;
 	Timer timer;
+	Bricks bricks;
 	int x = 150;
 	int ballX = 150;
-	int ballY = 100;
-	int dirX = +3;
-	int dirY = -3;
+	int ballY = 400;
+	int dirX = +4;
+	int dirY = -1;
 
 
 	
 	BoardPanel(){
 		paddle = new Paddle(x);
+		bricks = new Bricks();
 		this.setPreferredSize(BOARD_SIZE);
 		this.addKeyListener(new Key());
 		this.setFocusable(true);
@@ -50,21 +52,63 @@ public class BoardPanel extends JPanel implements ActionListener{
 		//paddle
 		paddle.draw(g);
 		
+		//bricks
+		bricks.draw(g);
+				
 		//ball
-		g.setColor(Color.orange);
+		g.setColor(Color.white);
 		g.fillOval(ballX,ballY, 15, 15);
 		g.dispose();
-//		Toolkit.getDefaultToolkit().sync(); 
+		Toolkit.getDefaultToolkit().sync(); 
+		
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		checkCollision();
 		ballMove();
 		repaint();
 		
 	}
 		
+	private void checkCollision() {
+		Rectangle brick = null;
+		int x = 0;
+		int y = 30;
+		int brickWidth = 50;
+		int brickHeight = 20;
+
+		int columns = 5;
+		int row = 5;
+		
+		for(int i=0; i<columns; i++) {
+			for(int j=0; j<row; j++) {
+				brick = new Rectangle(50+x, y, brickWidth, brickHeight);
+				x += 60;
+				
+				if (bricks.bricks[i][j] > 0){
+					if (new Rectangle(ballX,ballY, 15, 15).intersects(brick)){
+						bricks.bricks[i][j] = 0;
+						
+						if(ballX <= brickWidth || ballX >= brickWidth) {
+							dirX = -dirX;
+						}
+						if(ballY <= brickHeight || ballY >= brickHeight){
+						dirY = -dirY;
+						}
+					}
+				}
+			}
+			x = 0;
+			y+=40;
+		}
+		
+	
+		
+	}
+
 	private void ballMove() {
 		if (new Rectangle(ballX,ballY, 15, 15).intersects(new Rectangle(x, 480, 100, 8))){
 			dirY = -dirY;
