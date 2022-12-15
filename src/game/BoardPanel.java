@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,9 +28,10 @@ public class BoardPanel extends JPanel implements ActionListener{
 	Bricks bricks;
 	int x = 150;
 	int ballX = 150;
-	int ballY = 400;
-	int dirX = 3;
-	int dirY = 4;
+	int ballY = 200;
+	Random random = new Random();
+	int dirX = random.nextInt(4 - 3) + 3;
+	int dirY = random.nextInt(4 - 3) + 3;
 	int columns = 5;
 	int rows = 5;
 	boolean play;
@@ -50,25 +52,29 @@ public class BoardPanel extends JPanel implements ActionListener{
 	public void paint(Graphics g) {
 		
 		//background
-		if(chcekIfWin() == false || chcekIfWin() == true) {
-			g.setColor(Color.black);
-			g.fillRect(0,0,400,500);
-		}
+		g.setColor(Color.black);
+		g.fillRect(0,0,400,500);
+		
 		//win text
 		if(chcekIfWin() == true) {
 		    g.setColor(Color.lightGray);
 			g.drawString("YOU WON THE GAME!!!", 120, GAME_HEIGHT/2);
 		}
+		//lose text
+		if(checkIfLose() == true) {
+			g.setColor(Color.lightGray);
+		  	g.drawString("YOU LOSE THE GAME!!!", 120, GAME_HEIGHT/2);
+		}
 		//paddle
-		if(chcekIfWin() == false) {
+		if(chcekIfWin() == false && checkIfLose() == false) {
 			paddle.draw(g);
 		}
 		//bricks
-		if(chcekIfWin() == false) {
+		if(chcekIfWin() == false && checkIfLose() == false) {
 			bricks.draw(g);
 		}	
 		//ball
-		if(chcekIfWin() == false) {
+		if(chcekIfWin() == false && checkIfLose() == false) {
 			g.setColor(Color.white);
 			g.fillOval(ballX,ballY, 15, 15);
 			g.dispose();
@@ -82,10 +88,19 @@ public class BoardPanel extends JPanel implements ActionListener{
 		
 		checkCollision();
 		ballMove();
-		repaint();
 		chcekIfWin();
+		checkIfLose();
+		repaint();
+	
 	}
 		
+	private boolean checkIfLose() {
+		if (ballY > 480) {
+			return true;
+		} 
+		return false;
+	}
+
 	private boolean chcekIfWin() {
 
 		for(int i=0; i<rows; i++) {
@@ -113,20 +128,16 @@ public class BoardPanel extends JPanel implements ActionListener{
 				
 				if (bricks.bricks[i][j] > 0){
 					if (new Rectangle(ballX,ballY, 15, 15).intersects(brick)){
-						bricks.bricks[i][j] = 0;
-						
-						if(ballX > brickHeight || ballX <= brickHeight) {
+												
+						if(ballX >= brickHeight || ballX <= brickHeight) {
 							dirY = -dirY;
 							dirX = -dirX;
 						}
 						if(ballY > brickWidth || ballY <= brickWidth){
 							dirX = -dirX;
-							
 						}
+					bricks.bricks[i][j] = 0;	
 					}
-				}else {
-					x = 60;
-					continue;
 				}
 				
 			}

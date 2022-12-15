@@ -2,7 +2,6 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 public class Bricks {
 
@@ -42,7 +41,7 @@ public class Bricks {
 			for(int j=0; j<columns; j++) {
 				
 				if(bricks[i][j] > 0){
-				g.setColor(Color.orange);
+				g.setColor(new Color(214, 105, 54));
 				g.fillRect(50+x, y, 50, 20);
 				x += 60;
 				}else {
