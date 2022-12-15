@@ -57,12 +57,12 @@ public class BoardPanel extends JPanel implements ActionListener{
 		
 		//win text
 		if(chcekIfWin() == true) {
-		    g.setColor(Color.lightGray);
+		    g.setColor(Color.GREEN);
 			g.drawString("YOU WON THE GAME!!!", 120, GAME_HEIGHT/2);
 		}
 		//lose text
 		if(checkIfLose() == true) {
-			g.setColor(Color.lightGray);
+			g.setColor(Color.RED);
 		  	g.drawString("YOU LOSE THE GAME!!!", 120, GAME_HEIGHT/2);
 		}
 		//paddle
@@ -129,12 +129,10 @@ public class BoardPanel extends JPanel implements ActionListener{
 				if (bricks.bricks[i][j] > 0){
 					if (new Rectangle(ballX,ballY, 15, 15).intersects(brick)){
 												
-						if(ballX >= brickHeight || ballX <= brickHeight) {
+						if (ballX <= brick.x || ballX + 1 >= brick.x + brick.width) {
+							dirX = -dirX;
+						} else {
 							dirY = -dirY;
-							dirX = -dirX;
-						}
-						if(ballY > brickWidth || ballY <= brickWidth){
-							dirX = -dirX;
 						}
 					bricks.bricks[i][j] = 0;	
 					}
