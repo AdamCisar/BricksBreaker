@@ -28,8 +28,11 @@ public class BoardPanel extends JPanel implements ActionListener{
 	int x = 150;
 	int ballX = 150;
 	int ballY = 400;
-	int dirX = +4;
-	int dirY = -1;
+	int dirX = 3;
+	int dirY = 4;
+	int columns = 5;
+	int rows = 5;
+	boolean play;
 
 
 	
@@ -45,23 +48,33 @@ public class BoardPanel extends JPanel implements ActionListener{
 	}
 	
 	public void paint(Graphics g) {
+		
 		//background
-		g.setColor(Color.black);
-		g.fillRect(0,0,400,500);
-		
+		if(chcekIfWin() == false || chcekIfWin() == true) {
+			g.setColor(Color.black);
+			g.fillRect(0,0,400,500);
+		}
+		//win text
+		if(chcekIfWin() == true) {
+		    g.setColor(Color.lightGray);
+			g.drawString("YOU WON THE GAME!!!", 120, GAME_HEIGHT/2);
+		}
 		//paddle
-		paddle.draw(g);
-		
+		if(chcekIfWin() == false) {
+			paddle.draw(g);
+		}
 		//bricks
-		bricks.draw(g);
-				
+		if(chcekIfWin() == false) {
+			bricks.draw(g);
+		}	
 		//ball
-		g.setColor(Color.white);
-		g.fillOval(ballX,ballY, 15, 15);
-		g.dispose();
+		if(chcekIfWin() == false) {
+			g.setColor(Color.white);
+			g.fillOval(ballX,ballY, 15, 15);
+			g.dispose();
+			
+		}
 		Toolkit.getDefaultToolkit().sync(); 
-		
-		
 	}
 	
 	@Override
@@ -70,9 +83,22 @@ public class BoardPanel extends JPanel implements ActionListener{
 		checkCollision();
 		ballMove();
 		repaint();
-		
+		chcekIfWin();
 	}
 		
+	private boolean chcekIfWin() {
+
+		for(int i=0; i<rows; i++) {
+			for(int j=0; j<columns; j++) {
+				if (bricks.bricks[i][j] == 1) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+
 	private void checkCollision() {
 		Rectangle brick = null;
 		int x = 0;
@@ -80,11 +106,8 @@ public class BoardPanel extends JPanel implements ActionListener{
 		int brickWidth = 50;
 		int brickHeight = 20;
 
-		int columns = 5;
-		int row = 5;
-		
 		for(int i=0; i<columns; i++) {
-			for(int j=0; j<row; j++) {
+			for(int j=0; j<rows; j++) {
 				brick = new Rectangle(50+x, y, brickWidth, brickHeight);
 				x += 60;
 				
@@ -92,17 +115,23 @@ public class BoardPanel extends JPanel implements ActionListener{
 					if (new Rectangle(ballX,ballY, 15, 15).intersects(brick)){
 						bricks.bricks[i][j] = 0;
 						
-						if(ballX <= brickWidth || ballX >= brickWidth) {
+						if(ballX > brickHeight || ballX <= brickHeight) {
+							dirY = -dirY;
 							dirX = -dirX;
 						}
-						if(ballY <= brickHeight || ballY >= brickHeight){
-						dirY = -dirY;
+						if(ballY > brickWidth || ballY <= brickWidth){
+							dirX = -dirX;
+							
 						}
 					}
+				}else {
+					x = 60;
+					continue;
 				}
+				
 			}
 			x = 0;
-			y+=40;
+			y+=30;
 		}
 		
 	
@@ -112,7 +141,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 	private void ballMove() {
 		if (new Rectangle(ballX,ballY, 15, 15).intersects(new Rectangle(x, 480, 100, 8))){
 			dirY = -dirY;
-		}
+			}
 		
 		ballX += dirX;
 		ballY += dirY;
