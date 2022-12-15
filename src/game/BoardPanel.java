@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -12,6 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -34,7 +37,7 @@ public class BoardPanel extends JPanel implements ActionListener{
 	int dirY = random.nextInt(4 - 3) + 3;
 	int columns = 5;
 	int rows = 5;
-	boolean play;
+	JButton button;
 
 
 	
@@ -54,16 +57,18 @@ public class BoardPanel extends JPanel implements ActionListener{
 		//background
 		g.setColor(Color.black);
 		g.fillRect(0,0,400,500);
-		
 		//win text
 		if(chcekIfWin() == true) {
 		    g.setColor(Color.GREEN);
 			g.drawString("YOU WON THE GAME!!!", 120, GAME_HEIGHT/2);
+			g.drawString("Press enter for restart", 130, GAME_HEIGHT/2 + 20);
 		}
 		//lose text
 		if(checkIfLose() == true) {
 			g.setColor(Color.RED);
 		  	g.drawString("YOU LOSE THE GAME!!!", 120, GAME_HEIGHT/2);
+		  	g.drawString("Press enter for restart", 130, GAME_HEIGHT/2 + 20);
+		 
 		}
 		//paddle
 		if(chcekIfWin() == false && checkIfLose() == false) {
@@ -83,15 +88,16 @@ public class BoardPanel extends JPanel implements ActionListener{
 		Toolkit.getDefaultToolkit().sync(); 
 	}
 	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		checkCollision();
-		ballMove();
-		chcekIfWin();
-		checkIfLose();
-		repaint();
-	
+		if(chcekIfWin() == false && checkIfLose() == false) {
+			checkCollision();
+			ballMove();
+			chcekIfWin();
+			checkIfLose();
+			repaint();
+		}
 	}
 		
 	private boolean checkIfLose() {
@@ -179,14 +185,22 @@ public class BoardPanel extends JPanel implements ActionListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+
+
 	}
+		
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		x = paddle.keyPressed(e);
-		
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if(chcekIfWin() == true || checkIfLose() == true) {
+				ballX = 150;
+				ballY = 200;
+				bricks.createBricks();
+				repaint();
+			}
+		}
 	}
 
 	@Override
